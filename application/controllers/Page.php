@@ -2,30 +2,31 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Page extends CI_Controller{
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
-	 */
-	public function view($page = 'index'){
-		if(!file_exists(APPPATH.'views/pages/' .$page . '.php')){
-			show_404(); # 404 Page
+	// Standard function
+	public function index(){
+		
+	}
+
+	
+	public function login($page = 'index'){
+		$href_link = dirname($_SERVER['SCRIPT_NAME']) . '/' . __FUNCTION__ . '/'; // Link to switch from sign in / login form
+
+		// If the user wants to sign in
+		if($page != 'login'){
+			$data['title'] = 'Make an account'; // Title above the form
+			$data['href'] = $href_link . 'login'; // Add the parameter to the link to switch forms
+			$data['href_text'] = 'Already have an account'; // Text inside the anchor
 		}
 
-		$this->load->helper('url'); # Let the navigation bar use the URL inbuild functions
+		// If the user wants to log in
+		else{
+			$data['title'] = 'Login'; // Title above the form
+			$data['href'] = $href_link . 'signin'; // Add the parameter to the link to switch forms
+			$data['href_text'] = 'Sign Up'; // Text inside the anchor
+		}
 
 		$this->load->view('template/header'); # Header
-		$this->load->view('pages/' . $page); # Page
+		$this->load->view('pages/index', $data); # Login / signin page
 		$this->load->view('template/footer'); # Footer
 	}
 }
