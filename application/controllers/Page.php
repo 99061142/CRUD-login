@@ -1,8 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Page extends CI_Controller {
-
+class Page extends CI_Controller{
 	/**
 	 * Index Page for this controller.
 	 *
@@ -18,10 +17,15 @@ class Page extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index()
-	{
-		$this->load->view('template/header');
-		$this->load->view('pages/index');
-		$this->load->view('template/footer');
+	public function view($page = 'index'){
+		if(!file_exists(APPPATH.'views/pages/' .$page . '.php')){
+			show_404(); # 404 Page
+		}
+
+		$this->load->helper('url'); # Let the navigation bar use the URL inbuild functions
+
+		$this->load->view('template/header'); # Header
+		$this->load->view('pages/' . $page); # Page
+		$this->load->view('template/footer'); # Footer
 	}
 }
