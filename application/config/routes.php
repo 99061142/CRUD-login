@@ -53,3 +53,5 @@ $route['default_controller'] = 'page/index';
 
 $route['login'] = 'page/login/login';
 $route['signup'] = 'page/login/signup';
+
+$route['form/(:any)'] = 'form/$1';
