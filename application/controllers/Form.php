@@ -2,13 +2,13 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Form extends CI_Controller{
-    // If the user tried to sign up
-    public function signup(){
-        print("signup");
-    }
+	public function form_signup(){
+		$this->load->model('login_model');
+		$this->login_model->signup();
+	}
 
-    // If the user tried to log in
-    public function login(){
-        print("login");
-    }
+	public function form_login(){
+		$this->load->model('login_model');
+		$this->login_model->login();
+	}
 }
