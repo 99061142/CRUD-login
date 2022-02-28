@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Form extends CI_Controller{
 	// Form sign up / login page
-	public function form_page($form_type = 'login'){
+	public function form_page($form_type = 'login', $error_message=null){
 		$href_link = dirname($_SERVER['SCRIPT_NAME']) . '/'; // Link to switch from sign in / login form
 
 		// If the user wants to sign in
@@ -21,6 +21,9 @@ class Form extends CI_Controller{
 			$data['form_href_text'] = 'Sign up for an account'; // Text inside the anchor
 			$data['form_submit'] = $href_link . "form/form_login"; // Action if the form is submitted
 		}
+
+		$data['error_message'] = $error_message; // Error message if the an error occured with submitting
+
 
 		$this->load->view('template/header'); # Header
 		$this->load->view('pages/index', $data); # Login / sign up page
@@ -47,7 +50,7 @@ class Form extends CI_Controller{
 		
 		// If the account can't be found
 		else{
-			$this->form_page();	// Load the login form
+			$this->form_page('login', 'can\'t find an account');	// Load the login form
 		}
 	}
 
