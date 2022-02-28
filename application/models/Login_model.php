@@ -2,12 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Login_model extends CI_Model{
-    // Automatically load the database
-    public function __construct(){
-        $this->load->database();
-    }
-
-
     // Check if the session id belongs to an account
     public function confirm_session_id($id){        
         $sql = "SELECT `id` FROM `accounts` WHERE `id` = ?";
