@@ -55,8 +55,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = 'page/index'; // Landings page
 
-$route['login'] = 'page/login/login'; // Login form
-$route['signup'] = 'page/login/signup'; // Sign up form
+$route['login'] = 'page/form/login'; // Login form
+$route['signup'] = 'page/form/signup'; // Sign up form
 
 
 // Functionallity
