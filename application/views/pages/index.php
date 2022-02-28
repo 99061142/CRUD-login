@@ -1,6 +1,10 @@
 <div class="text-center">
     <h1 class="my-4 text-capitalize"><?= $form_title; ?></h1>
     <div class="border border-dark px-5 pt-5">
+        <div class="mb-5">
+            <p class="bg-danger"><?= $error_message ?></p>
+        </div>
+
         <form action="<?= $form_submit; ?>" method="post">
             <div>
                 <input class="w-100 py-2" type="text" name="email" placeholder="Enter email" required />
