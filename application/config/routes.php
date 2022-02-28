@@ -53,7 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // Pages
 
-$route['default_controller'] = 'form/check_saved_login'; // Landings page
+$route['default_controller'] = 'page/check_saved_login'; // Landings page
 
 $route['login'] = 'form/form_page/login'; // Login form
 $route['signup'] = 'form/form_page/signup'; // Sign up form
