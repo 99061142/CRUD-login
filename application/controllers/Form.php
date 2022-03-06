@@ -11,7 +11,12 @@ class Form extends MY_controller{
 
 	// When the user submits the singup form
 	public function signup(){
-	
+		// If the user used an email that was already used
+		if(!$this->login_model->mail_used($_POST['email'])){
+			$this->login_model->add_account($_POST['email'], $_POST['password']);
+		}
+
+		redirect('login'); // Go to the login form
 	}
 
 
@@ -19,13 +24,12 @@ class Form extends MY_controller{
 	public function login(){
 		$account_information = $this->login_model->account_information($_POST['email'], $_POST['password']); // Check if the account can be found
 
-
 		// If the account was found
 		if($account_information){
 			$this->session->userdata = array(
-				'id' => $account_information['id'],
-        		'email' => $account_information['email'],
-    	    	'password' => $account_information['password'],
+				'id' => $account_information->id,
+        		'email' => $account_information->email,
+    	    	'password' => $account_information->password,
     	    	'logged_in' => TRUE
 			);
 
