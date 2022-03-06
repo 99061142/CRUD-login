@@ -13,4 +13,3 @@
 		<!-- /Bootstrap -->
     </head>
     <body>
-        <div class="container">
