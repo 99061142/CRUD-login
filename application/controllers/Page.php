@@ -1,68 +1,47 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Page extends CI_Controller{
-	// Form sign up / login page
-	public function form($form_type = 'login', $error_message=null){
-		$href_link = dirname($_SERVER['SCRIPT_NAME']) . '/'; // Link to switch from sign in / login form
+class Page extends MY_controller{
+	// Login form
+	public function form_login(){
+		$this->load->helper('form');
+		
+		// Login data
+		$data['form_title'] = 'Login'; // Title above the form
+		$data['form_href'] = 'signup'; // Route to the signup form
+		$data['form_href_text'] = 'Sign up for an account'; // Text inside the anchor to route to the signup form
+		$data['form_submit'] = 'login'; // Route when the user submits the form
 
-		// If the user wants to sign in
-		if($form_type != 'login'){
-			$data['form_title'] = 'sign up'; // Title above the form
-			$data['form_href'] = $href_link . 'login'; // Add the parameter to the link to switch forms
-			$data['form_href_text'] = 'Already have an account? Log In'; // Text inside the anchor
-			$data['form_submit'] = $href_link . "form/form_signup"; // Action if the form is submitted
-		}
-
-		// If the user wants to log in
-		else{
-			$data['form_title'] = 'login'; // Title above the form
-			$data['form_href'] = $href_link . 'signup'; // Add the parameter to the link to switch forms
-			$data['form_href_text'] = 'Sign up for an account'; // Text inside the anchor
-			$data['form_submit'] = $href_link . "form/form_login"; // Action if the form is submitted
-		}
-
-		$data['error_message'] = $error_message; // Error message if the an error occured with submitting
-
-		// load the sign up / login page
+		// Signup / login form
 		$this->load->view('template/header');
 		$this->load->view('pages/index', $data);
 		$this->load->view('template/footer'); 
 	}
 
 
-	// Homepage to choose the board the user owns
+	// Sign up form
+	public function form_signup(){
+		$this->load->helper('form');
+
+		// Signup data
+		$data['form_title'] = 'Sign up'; // Title above the form
+		$data['form_href'] = 'login'; // Route to the signup form
+		$data['form_href_text'] = 'Already have an account? Log In'; // Text inside the anchor to route to the signup form
+		$data['form_submit'] = 'signup'; // Route when the user submits the form
+
+		// Signup / login form
+		$this->load->view('template/header');
+		$this->load->view('pages/index', $data);
+		$this->load->view('template/footer'); 		
+	}
+
+
+	// Homepage
 	public function homepage(){
-		// Load the homepage
+		// Homepage
 		$this->load->view('template/header');
 		$this->load->view('template/navigation');
 		$this->load->view('pages/homepage');
 		$this->load->view('template/footer');
-	}
-
-
-	// Controls if the user saved the login (Landings function)
-	public function check_saved_login(){
-		// If the user did save the login information
-		if(isset($_SESSION['id'])){
-			// Controls if the session id is valid
-			$this->load->model('login_model');
-			$session_id = $this->login_model->confirm_session_id($_SESSION['id']);
-
-			// If id can be found of the user
-			if($session_id){
-				$this->homepage();
-			}
-			
-			// If id can't be found of the user
-			else{
-				$this->form(); // Load the login form
-			}
-		}
-		
-		// If the user didn't save the login information
-		else{
-			$this->form(); // Load the login form
-		}
 	}
 }
