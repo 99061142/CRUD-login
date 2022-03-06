@@ -1,35 +1,40 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-
-require_once(dirname(__FILE__)."/page.php");
-
-class Form extends Page{
-    public function __construct(){
+class Form extends MY_controller{
+	// Always loads
+	public function __construct(){
 		parent::__construct();
 		$this->load->model('login_model');
 	}
 
 
-	// If the user signed up
-	public function form_signup(){
-		$this->login_model->signup();
+	// When the user submits the singup form
+	public function signup(){
+	
 	}
 
-	// If the user logged in
-	public function form_login(){
-		$login_id = $this->login_model->confirm_login($_POST['email'], $_POST['password']); // Check if the account is made
+
+	// When the user submits the login form
+	public function login(){
+		$account_information = $this->login_model->account_information($_POST['email'], $_POST['password']); // Check if the account can be found
+
 
 		// If the account was found
-		if($login_id){
-			$_SESSION['id'] = $login_id; // Save the accounts ID to the session
-			
-			$this->homepage(); // Go to the homepage
+		if($account_information){
+			$this->session->userdata = array(
+				'id' => $account_information['id'],
+        		'email' => $account_information['email'],
+    	    	'password' => $account_information['password'],
+    	    	'logged_in' => TRUE
+			);
+
+			redirect('homepage'); // Go to the homepage
 		}
-		
+
 		// If the account can't be found
-		else{
-			$this->form('login', 'can\'t find an account');	// Load the login form
+		else{	
+			redirect("login"); // Go to the login form
 		}
 	}
 }
