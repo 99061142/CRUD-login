@@ -50,15 +50,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
+$route['default_controller'] = 'page/homepage'; // Landings page
 
-// Pages
+$route['signup'] = 'page/form_signup'; // Sign up form
+$route['login'] = 'page/form_login'; // Login form
+$route['homepage'] = 'page/homepage'; // Homepage
 
-$route['default_controller'] = 'page/check_saved_login'; // Landings page
-
-$route['login'] = 'form/form_page/login'; // Login form
-$route['signup'] = 'form/form_page/signup'; // Sign up form
+$route['form_submit/signup'] = 'form/signup'; // If the user submits the signup form
+$route['form_submit/login'] = 'form/login'; // If the user submits the login form
 
 
-// Functionallity
-
-$route['form/(:any)'] = 'form/$1'; // Form submit functions
