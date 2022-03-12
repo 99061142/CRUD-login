@@ -56,6 +56,8 @@ $route['signup'] = 'page/form_signup'; // Sign up form
 $route['login'] = 'page/form_login'; // Login form
 $route['homepage'] = 'page/homepage'; // Homepage
 
+$route['logout'] = 'general/logout'; // Logout the user
+
 $route['form_submit/signup'] = 'form/signup'; // If the user submits the signup form
 $route['form_submit/login'] = 'form/login'; // If the user submits the login form
 
