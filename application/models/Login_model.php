@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Login_model extends CI_Model{
     // Check if the mail is already used, and return true if so
-    public function mail_used($email){
+    public function mail_aready_used($email){
         $this->db->select('email');
         $this->db->from('accounts');
         $this->db->where('email', $email);
@@ -12,8 +12,9 @@ class Login_model extends CI_Model{
         return $data->row()->email == true;
     }
 
+
     // Add an new account with the signup information the user has given
-    public function add_account($email, $password, $salt='nog toevoegen'){
+    public function add_account($email, $password, $salt=''){
         $data = [
             'email' => $email,
             'password' => $password,
@@ -26,7 +27,7 @@ class Login_model extends CI_Model{
 
     // Get the account data if the user logged in
     public function account_information($email, $password){    
-        $this->db->select('id, email, password');
+        $this->db->select('email, password');
         $this->db->from('accounts');
         $this->db->where('email', $email);
         $this->db->where('password', $password);
