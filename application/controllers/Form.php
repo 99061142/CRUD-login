@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Form extends MY_controller{
-	// Always loads
 	public function __construct(){
 		parent::__construct();
 		$this->load->model('login_model');
@@ -32,7 +31,6 @@ class Form extends MY_controller{
 		// If the account was found
 		if($account_information){
 			$this->session->userdata = array(
-				'id' => $account_information->id,
         		'email' => $account_information->email,
     	    	'password' => $account_information->password,
     	    	'logged_in' => TRUE
