@@ -10,14 +10,13 @@ class Form extends MY_controller{
 
 	// When the user submits the singup form
 	public function signup(){
-		// If the user used an password
+		// If the user answered all the questions
 		if($_POST['email'] && $_POST['password']){
-			// If the user used an email that was already used
+			// If the user used an new email
 			if(!$this->login_model->mail_aready_used($_POST['email'])){
 				$this->login_model->add_account($_POST['email'], $_POST['password']);
+				redirect('login'); // Go to the login form
 			}
-
-			redirect('login'); // Go to the login form
 		}
 
 		redirect('signup'); // Go to the signup form
