@@ -32,7 +32,8 @@ class Form extends MY_controller{
 			$this->session->userdata = array(
         		'email' => $account_information->email,
     	    	'password' => $account_information->password,
-    	    	'logged_in' => TRUE
+				'username' => $account_information->username,
+    	    	'logged_in' => TRUE,
 			);
 
 			redirect('homepage'); // Go to the homepage
