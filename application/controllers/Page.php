@@ -62,4 +62,12 @@ class Page extends MY_controller{
 		$this->load->view('pages/homepage');
 		$this->load->view('template/footer');
 	}
+
+
+	public function account(){
+		$this->load->view('template/header');
+		$this->load->view('template/navigation');
+		$this->load->view('pages/account');
+		$this->load->view('template/footer');	
+	}
 }
