@@ -27,7 +27,7 @@ class Login_model extends CI_Model{
 
     // Get the account data if the user logged in
     public function account_information($email, $password){    
-        $this->db->select('email, password');
+        $this->db->select('email, password, username');
         $this->db->from('accounts');
         $this->db->where('email', $email);
         $this->db->where('password', $password);
