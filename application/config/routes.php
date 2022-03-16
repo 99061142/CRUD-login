@@ -55,11 +55,17 @@ $route['default_controller'] = 'page/homepage'; // Landings page
 $route['signup'] = 'page/signin_form/signup'; // Sign up form
 $route['login'] = 'page/signin_form/login'; // Login form
 $route['homepage'] = 'page/homepage'; // Homepage
-$route['account'] = 'page/account';
 
-$route['logout'] = 'general/logout'; // Logout the user
 
+// ACCOUNT LINKS (SETTINGS)
+$route['profile'] = 'page/account/profile';
+$route['settings'] = 'page/account/settings';
+// /ACCOUNT LINKS (SETTINGS)
+
+
+// HREF REDIRECTS
+$route['logout'] = 'general/logout'; // If the user logouts
 $route['form_submit/signup'] = 'form/signup'; // If the user submits the signup form
 $route['form_submit/login'] = 'form/login'; // If the user submits the login form
-
+// /HREF REDIRECTS
 
