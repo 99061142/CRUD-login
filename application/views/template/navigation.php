@@ -20,7 +20,7 @@
                 <p>Account</p>
                 <div class="dropdown-divider"></div>
                 <li class="dropdown-item p-0">
-                    <a class="text-dark text-decoration-none" href="account">Settings</a>
+                    <a class="text-dark text-decoration-none" href="settings">Settings</a>
                 </li>
                 <div class="dropdown-divider"></div>
                 <li class="dropdown-item p-0">
