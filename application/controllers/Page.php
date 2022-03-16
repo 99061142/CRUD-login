@@ -64,10 +64,17 @@ class Page extends MY_controller{
 	}
 
 
-	public function account(){
+	public function account($account_info){
+		$data['username'] = $_SESSION['username'];
+
+		if($account_info == "profile"){
+			$this->load->helper('form');
+		}
+
 		$this->load->view('template/header');
 		$this->load->view('template/navigation');
-		$this->load->view('pages/account');
+		$this->load->view('template/account-navigation', $data);
+		$this->load->view("pages/{$account_info}");
 		$this->load->view('template/footer');	
 	}
 }
