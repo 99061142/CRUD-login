@@ -20,6 +20,10 @@
                 <p>Account</p>
                 <div class="dropdown-divider"></div>
                 <li class="dropdown-item p-0">
+                    <a class="text-dark text-decoration-none" href="account">Settings</a>
+                </li>
+                <div class="dropdown-divider"></div>
+                <li class="dropdown-item p-0">
                     <a class="text-dark text-decoration-none" href="logout">Log out</a>
                 </li>
             </ul>
