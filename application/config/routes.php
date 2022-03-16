@@ -55,6 +55,7 @@ $route['default_controller'] = 'page/homepage'; // Landings page
 $route['signup'] = 'page/signin_form/signup'; // Sign up form
 $route['login'] = 'page/signin_form/login'; // Login form
 $route['homepage'] = 'page/homepage'; // Homepage
+$route['account'] = 'page/account';
 
 $route['logout'] = 'general/logout'; // Logout the user
 
