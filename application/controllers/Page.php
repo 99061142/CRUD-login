@@ -65,7 +65,7 @@ class Page extends MY_controller{
 	}
 
 
-	public function account($account_info){
+	public function account_settings($account_info){
 		$data['username'] = $_SESSION['username'];
 
 		if($account_info == "profile"){
@@ -77,5 +77,16 @@ class Page extends MY_controller{
 		$this->load->view('template/account-navigation', $data);
 		$this->load->view("pages/{$account_info}");
 		$this->load->view('template/footer');	
+	}
+
+
+	// Ask if the user wants to delete the account
+	public function ask_account_deletion(){
+		$this->load->helper('form');
+
+		$this->load->view('template/header');
+		$this->load->view('template/navigation');
+		$this->load->view('pages/ask-account-deletion');
+		$this->load->view('template/footer');
 	}
 }
