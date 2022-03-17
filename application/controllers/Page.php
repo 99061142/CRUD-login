@@ -46,6 +46,7 @@ class Page extends MY_controller{
 		$data['submit_route'] = $form_data['submit_route'][$form_type]; // Route when the user submits the form
 		$data['email'] = $form_data['email']; // Email the user has logged in with
 		$data['password'] = $form_data['password']; // Password the user has logged in with
+		$data['form_type'] = $form_type;
 
 		// Signup / login form
 		$this->load->view('template/header');
