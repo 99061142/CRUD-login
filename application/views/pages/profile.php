@@ -2,14 +2,14 @@
     <hr />
 
     <div class="w-75">
-        <?= form_open(""); ?>
+        <?= form_open("profile_submit"); ?>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" />
+                <input type="text" class="form-control" name="username" id="username" />
             </div>
             <div class="form-group">
                 <label for="bio">Bio</label>
-                <textarea class="form-control" id="bio"></textarea>
+                <textarea class="form-control" name="bio" id="bio"></textarea>
             </div>
             <button type="submit" class="btn btn-primary w-100 mt-5">Submit</button>
         </form>
