@@ -12,9 +12,9 @@ class Form extends MY_controller{
 	public function signup(){
 		// If the user answered all the questions
 		if($_POST['email'] && $_POST['password']){
-			// If the user used an new email
+			// If the user used an email that was never used before
 			if(!$this->login_model->mail_aready_used($_POST['email'])){
-				$this->login_model->add_account($_POST['email'], $_POST['password']);
+				$this->login_model->add_account($_POST['email'], $_POST['password']); // Create the account
 				redirect('login'); // Go to the login form
 			}
 		}
@@ -31,10 +31,7 @@ class Form extends MY_controller{
 			redirect('homepage'); // Go to the homepage
 		}
 
-		// If the account can't be found
-		else{	
-			redirect("login"); // Go to the login form
-		}
+		redirect("login"); // Go to the login form
 	}
 
 
@@ -45,7 +42,7 @@ class Form extends MY_controller{
 			$password = $_SESSION['password'];
 		}
 		
-		// If the user has logged in, and need the starting session data
+		// If the user has logged in, and needs the session data
 		else{
 			$email = $_POST['email'];
 			$password = $_POST['password'];
@@ -66,23 +63,22 @@ class Form extends MY_controller{
 	}
 
 
-	// If the user changed his profile 
+	// If the information of the profile gets changed by the user
 	public function profile(){
-		$account_id = $this->login_model->get_account_id($_SESSION['email'], $_SESSION['password']); // Get the id of the account
-	
-		$data = []; // Array where the data gets stored that needs to be changed
+		$change_data = []; // Array with the data that needs to be changed
 
 		// Add the values that needs to be changed to the array
 		foreach($_POST as $key => $value){
 			// If the user changed the value
 			if($value){
-				$data[$key] = $value;
+				$change_data[$key] = $value;
 			}
 		}
 
-		$this->login_model->change_account_data($_SESSION['email'], $_SESSION['password'], $data); // Change the values that the user changed
+		$this->login_model->change_account_data($_SESSION['email'], $_SESSION['password'], $change_data); // Change the values that the user changed
+		
+		$this->get_session_data(); // Updates the session data
 
-		$this->get_session_data(); // Update the session data
 		redirect('profile'); // Redirects the user back
 	}
 
@@ -96,9 +92,6 @@ class Form extends MY_controller{
 			redirect('signup'); // Redirects the user to the singup page
 		}
 		
-		// If the user did not want to delete the account
-		else{
-			redirect('settings'); // Redirects the user to the settings page
-		}
+		redirect('settings'); // Redirects the user to the settings page
 	}
 }
