@@ -7,26 +7,23 @@ class MY_controller extends CI_Controller{
 		parent::__construct();
 		$this->load->helper('url');
 
-		$first_url_parameter = $this->uri->segment('1');
-        $acccount_found = false;
+		$first_url_parameter = $this->uri->segment('1'); // URL route
+        $acccount_found = false; // If the account could be found
 
-        // When the user redirects to an page without logging in
+        // If the session says the user logged in
         if(isset($_SESSION['logged_in'])){
+            // If the email and password are stored in the session
             if(isset($_SESSION['email'], $_SESSION['password'])){
+                // Check if the account can be found
                 $this->load->model('login_model');
                 $acccount_found = $this->login_model->account_information($_SESSION['email'], $_SESSION['password']);
             }
         }
 
         // If the user did not log in
-        if(!strpos($first_url_parameter, "submit") && !$acccount_found){  
-            // If the landings page can't be entered without logging in
-            if(!$first_url_parameter){
-                redirect('login'); // Go to the login form
-            }
-
-            // If the user did go to another page without logging in
-            else if(!in_array($first_url_parameter, ['signup', 'login'])){
+        if(!$acccount_found){  
+            // If the user did go to another page without logging in except the login / signup page
+            if(!strstr($first_url_parameter, "login") && !strstr($first_url_parameter, "signup")){
                 redirect('login'); // Go to the login form
             }
         }
