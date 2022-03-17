@@ -55,16 +55,19 @@ $route['default_controller'] = 'page/homepage'; // Landings page
 $route['signup'] = 'page/signin_form/signup'; // Sign up form
 $route['login'] = 'page/signin_form/login'; // Login form
 $route['homepage'] = 'page/homepage'; // Homepage
+$route['account-deletion'] = 'page/ask_account_deletion';
 
 
 // ACCOUNT LINKS (SETTINGS)
-$route['profile'] = 'page/account/profile';
-$route['settings'] = 'page/account/settings';
+$route['profile'] = 'page/account_settings/profile';
+$route['settings'] = 'page/account_settings/settings';
 // /ACCOUNT LINKS (SETTINGS)
 
 
 // HREF REDIRECTS
 $route['logout'] = 'general/logout'; // If the user logouts
+$route['delete-account'] = 'form/delete_account'; // Delete the account the user is on
+
 $route['signup_submit'] = 'form/signup'; // If the user submits the signup form
 $route['login_submit'] = 'form/login'; // If the user submits the login form
 $route['profile_submit'] = 'form/profile';
