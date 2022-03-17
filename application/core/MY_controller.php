@@ -19,7 +19,7 @@ class MY_controller extends CI_Controller{
         }
 
         // If the user did not log in
-        if($first_url_parameter != "form_submit" && !$acccount_found){            
+        if(!strpos($first_url_parameter, "submit") && !$acccount_found){  
             // If the landings page can't be entered without logging in
             if(!$first_url_parameter){
                 redirect('login'); // Go to the login form
