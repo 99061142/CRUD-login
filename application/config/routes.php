@@ -65,7 +65,7 @@ $route['settings'] = 'page/account/settings';
 
 // HREF REDIRECTS
 $route['logout'] = 'general/logout'; // If the user logouts
-$route['form_submit/signup'] = 'form/signup'; // If the user submits the signup form
-$route['form_submit/login'] = 'form/login'; // If the user submits the login form
+$route['signup_submit'] = 'form/signup'; // If the user submits the signup form
+$route['login_submit'] = 'form/login'; // If the user submits the login form
+$route['profile_submit'] = 'form/profile';
 // /HREF REDIRECTS
-
