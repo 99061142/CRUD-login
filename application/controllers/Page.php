@@ -2,55 +2,70 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Page extends MY_controller{
-	// Signup / login form
-	public function signin_form($form_type){
+	// Singup form
+	public function signup_form(){
 		$this->load->helper('form');
 
-		$form_data = array(
-			'title' => array(
-				'login' => 'Login',
-				'signup' => 'Sign up'
-			),
+		$email = null;
+		$password = null;
 
-			'href_route' => array(
-				'login' => 'signup',
-				'signup' => 'login'
-			),
-
-			'href_text' => array(
-				'login' => 'Sign up for an account',
-				'signup' => 'Already have an account? Log In'
-			),
-
-			'submit_route' => array(
-				'login' => 'login',
-				'signup' => 'signup'
-			),
-
-			'email' => null,
-			'password' => null
-		);
-
-		if(isset($_SESSION['email']) && isset($_SESSION['password'])){
+		// If the email and password are stored in the session
+		if(isset($_SESSION['email'], $_SESSION['password'])){
+			// Get the account data with the session data
 			$this->load->model('login_model');
 			$account_information = $this->login_model->account_information($_SESSION['email'], $_SESSION['password']);
 		
-			$form_data['email'] = $account_information->email;
-			$form_data['password'] = $account_information->password;
+			// If the account could be found
+			if(isset($account_information->email, $account_information->password)){
+				$email = $account_information->email;
+				$password = $account_information->password;
+			}
+		}
+
+		// Signup data
+		$data['title'] = 'Sign up'; // Title above the form
+		$data['href_route'] = 'login'; // Route to the login form
+		$data['href_text'] = 'Already have an account? Log In'; // Text for the route to the login form
+		$data['email'] = $email; // Email that was stored inside the session
+		$data['password'] = $password; // Password that was stored inside the session
+
+		// Signup form
+		$this->load->view('template/header');
+		$this->load->view('pages/signup', $data);
+		$this->load->view('template/footer'); 
+	}
+
+
+	// Login form
+	public function login_form(){
+		$this->load->helper('form');
+
+		$email = null;
+		$password = null;
+
+		// If the email and password are stored in the session
+		if(isset($_SESSION['email'], $_SESSION['password'])){
+			// Get the account data with the session data
+			$this->load->model('login_model');
+			$account_information = $this->login_model->account_information($_SESSION['email'], $_SESSION['password']);
+		
+			// If the account could be found
+			if(isset($account_information->email, $account_information->password)){
+				$email = $account_information->email;
+				$password = $account_information->password;
+			}
 		}
 
 		// Login data
-		$data['title'] = $form_data['title'][$form_type]; // Title above the form
-		$data['href_route'] = $form_data['href_route'][$form_type]; // Route to the signup form
-		$data['href_text'] = $form_data['href_text'][$form_type]; // Text inside the anchor to route to the signup form
-		$data['submit_route'] = $form_data['submit_route'][$form_type]; // Route when the user submits the form
-		$data['email'] = $form_data['email']; // Email the user has logged in with
-		$data['password'] = $form_data['password']; // Password the user has logged in with
-		$data['form_type'] = $form_type;
+		$data['title'] = 'Login'; // Title above the form
+		$data['href_route'] = 'signup'; // Route to the signup form
+		$data['href_text'] = 'Sign up for an account'; // Text for the route to the signup form
+		$data['email'] = $email; // Email that was stored inside the session
+		$data['password'] = $password; // Password that was stored inside the session
 
-		// Signup / login form
+		// Login form
 		$this->load->view('template/header');
-		$this->load->view('pages/index', $data);
+		$this->load->view('pages/login', $data);
 		$this->load->view('template/footer'); 
 	}
 
