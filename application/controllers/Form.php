@@ -80,9 +80,25 @@ class Form extends MY_controller{
 			}
 		}
 
-		$this->login_model->change_account_data($account_id, $data); // Change the values that the user changed
+		$this->login_model->change_account_data($_SESSION['email'], $_SESSION['password'], $data); // Change the values that the user changed
 
 		$this->get_session_data(); // Update the session data
 		redirect('profile'); // Redirects the user back
+	}
+
+
+	public function delete_account(){
+		// If the user wants to delete the account
+		if(isset($_POST['yes'])){
+        	$this->login_model->delete_account_data($_SESSION['email'], $_SESSION['password']); // Delete the account of the user
+
+			session_destroy(); // Delete the session data
+			redirect('signup'); // Redirects the user to the singup page
+		}
+		
+		// If the user did not want to delete the account
+		else{
+			redirect('settings'); // Redirects the user to the settings page
+		}
 	}
 }
