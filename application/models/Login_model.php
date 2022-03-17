@@ -35,4 +35,23 @@ class Login_model extends CI_Model{
 
         return $data->row();
     }
+
+
+    public function get_account_id($email, $password){
+        $this->db->select('id');
+        $this->db->from('accounts');
+        $this->db->where('email', $email);
+        $this->db->where('password', $password);
+        $data = $this->db->get();
+
+        return $data->row()->id;
+    }
+
+    public function change_account_data($account_id, $data){
+        // If there are values that needs to be changed
+        if($data){
+            $this->db->where('id', $account_id);
+            $this->db->update('accounts', $data);
+        }
+    }
 }
