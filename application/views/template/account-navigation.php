@@ -6,7 +6,7 @@
         <p class="mt-3 font-weight-bold">@<?= $username ?></p>
     </div>
 
-    <div class="">
+    <div>
         <ul class="list-unstyled font-weight-bold d-flex justify-content-around">
             <li>
                 <a class="border border-dark py-1 px-4 text-decoration-none text-dark" href="profile">PROFILE</a>
