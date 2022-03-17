@@ -47,11 +47,21 @@ class Login_model extends CI_Model{
         return $data->row()->id;
     }
 
-    public function change_account_data($account_id, $data){
+
+    public function change_account_data($email, $password, $data){
         // If there are values that needs to be changed
         if($data){
-            $this->db->where('id', $account_id);
+            $this->db->where('email', $email);
+            $this->db->where('password', $password);
             $this->db->update('accounts', $data);
         }
+    }
+
+
+    // Delete the account of the user
+    public function delete_account_data($email, $password){
+        $this->db->where('email', $email);
+        $this->db->where('password', $password);
+        $this->db->delete('accounts');
     }
 }
