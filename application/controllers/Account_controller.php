@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Form extends MY_controller{
+class Account_controller extends MY_controller{
 	public function __construct(){
 		parent::__construct();
-		$this->load->model('login_model');
+		$this->load->model('account_model');
 	}
 
 
@@ -18,7 +18,7 @@ class Form extends MY_controller{
 			);
 
 			// If the data is never used for an account
-			if(!$this->login_model->check_account($where)){
+			if(!$this->account_model->exists_account($where)){
 				// Data for the new account
 				$new_account_data = array(
 					'salt' => ''
@@ -29,7 +29,7 @@ class Form extends MY_controller{
 					$new_account_data[$key] = $value;
 				}
 
-				$this->login_model->add_account($new_account_data); // Create the account
+				$this->account_model->add_account($new_account_data); // Create the account
 				redirect('login'); // Go to the login form
 			}
 		}
@@ -47,47 +47,12 @@ class Form extends MY_controller{
 		);
 
 		// If the data is being used for an account
-		if($this->login_model->check_account($where)){
+		if($this->account_model->exists_account($where)){
 			$this->get_session_data(); // Get the session data
 			redirect('homepage'); // Go to the homepage
 		}
 
 		redirect("login"); // Go to the login form
-	}
-
-
-	// Add the data to the session, and let the user login
-	public function get_session_data(){
-		// If the user already logged in, but need to update the session data
-		if(isset($_SESSION['email'], $_SESSION['password'])){
-			$email = $_SESSION['email'];
-			$password = $_SESSION['password'];
-		}
-		
-		// If the user has logged in, and needs the session data
-		else{
-			$email = $_POST['email'];
-			$password = $_POST['password'];
-		}
-
-		// Data that is being checked if it's already used for an account
-		$where = array(
-			'email' => $email,
-			'password' => $password
-		);
-
-		// If the data is being used for an account
-		if($this->login_model->check_account($where)){
-			$account_data = $this->login_model->get_account_data($where); // Get specific account data to add it into the session
-
-			// Add the account data into the session
-			$this->session->userdata = array(
-        		'email' => $account_data->email,
-    	    	'password' => $account_data->password,
-				'username' => $account_data->username,
-    	    	'logged_in' => TRUE,
-			);	
-		}
 	}
 
 
@@ -111,7 +76,7 @@ class Form extends MY_controller{
 
 		// If there are values that needs to be changed
 		if($change_data){
-			$this->login_model->change_account_data($where, $change_data); // Change the values that the user changed
+			$this->account_model->change_account_data($where, $change_data); // Change the values that the user changed
 			$this->get_session_data(); // Updates the session data
 		}
 
@@ -129,12 +94,47 @@ class Form extends MY_controller{
 				'password' => $_POST['password']
 			);
 
-        	$this->login_model->delete_account_data($where); // Delete the account of the user
+        	$this->account_model->delete_account_data($where); // Delete the account of the user
 
 			session_destroy(); // Delete the session data
 			redirect('signup'); // Redirects the user to the singup page
 		}
 		
 		redirect('settings'); // Redirects the user to the settings page
+	}
+
+
+	// Get the data of the user, and add it into the session
+	public function get_session_data(){
+		// If the user already logged in, but need to update the session data
+		if(isset($_SESSION['email'], $_SESSION['password'])){
+			$email = $_SESSION['email'];
+			$password = $_SESSION['password'];
+		}
+		
+		// If the user has logged in, and needs the session data
+		else{
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+		}
+
+		// Data that is being checked if it's already used for an account
+		$where = array(
+			'email' => $email,
+			'password' => $password
+		);
+
+		// Check if an account exists with the data inside the array
+		if($this->account_model->exists_account($where)){
+			$account_data = $this->account_model->get_account_data($where); // Get the data that the model returns
+
+			// Add the account data into the session
+			$this->session->userdata = array(
+        		'email' => $account_data->email,
+    	    	'password' => $account_data->password,
+				'username' => $account_data->username,
+    	    	'logged_in' => TRUE,
+			);	
+		}
 	}
 }
