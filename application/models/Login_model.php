@@ -2,66 +2,44 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Login_model extends CI_Model{
-    // Check if the mail is already used, and return true if so
-    public function mail_aready_used($email){
-        $this->db->select('email');
+    // Check if an account was made with the specific data inside the array
+    public function check_account($where){
+        $this->db->select('id');
         $this->db->from('accounts');
-        $this->db->where('email', $email);
+        $this->db->where($where);
         $data = $this->db->get();
 
-        return $data->row()->email == true;
+        return $data->row() == true;
     }
 
 
-    // Add an new account with the signup information the user has given
-    public function add_account($email, $password, $salt=''){
-        $data = [
-            'email' => $email,
-            'password' => $password,
-            'salt' => $salt,
-        ];
-
-        $this->db->insert('accounts', $data);
-    }
-
-
-    // Get the account data if the user logged in
-    public function account_information($email, $password){    
+    // Get the account data of the user to add in in the session
+    public function get_account_data($where){
         $this->db->select('email, password, username');
         $this->db->from('accounts');
-        $this->db->where('email', $email);
-        $this->db->where('password', $password);
+        $this->db->where($where);
         $data = $this->db->get();
 
         return $data->row();
     }
 
 
-    public function get_account_id($email, $password){
-        $this->db->select('id');
-        $this->db->from('accounts');
-        $this->db->where('email', $email);
-        $this->db->where('password', $password);
-        $data = $this->db->get();
-
-        return $data->row()->id;
+    // Add a new account
+    public function add_account($new_account_data){
+        $this->db->insert('accounts', $new_account_data);
     }
 
-
-    public function change_account_data($email, $password, $data){
-        // If there are values that needs to be changed
-        if($data){
-            $this->db->where('email', $email);
-            $this->db->where('password', $password);
-            $this->db->update('accounts', $data);
-        }
+    
+    // Change the account data of the user
+    public function change_account_data($where, $change_data){
+        $this->db->where($where);
+        $this->db->update('accounts', $change_data);
     }
 
 
     // Delete the account of the user
-    public function delete_account_data($email, $password){
-        $this->db->where('email', $email);
-        $this->db->where('password', $password);
+    public function delete_account_data($where){
+        $this->db->where($where);
         $this->db->delete('accounts');
     }
 }
