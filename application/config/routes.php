@@ -52,23 +52,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = 'page/homepage'; // Landings page
 
-$route['signup'] = 'page/signup_form'; // Sign up form
+// Pages
+$route['signup'] = 'page/signup_form'; // Signup form
 $route['login'] = 'page/login_form'; // Login form
 $route['homepage'] = 'page/homepage'; // Homepage
-$route['account-deletion'] = 'page/ask_account_deletion';
+// /Pages
 
 
-// ACCOUNT LINKS (SETTINGS)
+// Confirmation pages
+$route['account-deletion'] = 'page/ask_account_deletion'; // Deletion of the account
+// /Confirmation pages
+
+
+
+// Account settings
 $route['profile'] = 'page/account_settings/profile';
 $route['settings'] = 'page/account_settings/settings';
-// /ACCOUNT LINKS (SETTINGS)
+// /Account settings
 
 
-// HREF REDIRECTS
-$route['logout'] = 'general/logout'; // If the user logouts
-$route['delete-account'] = 'form/delete_account'; // Delete the account the user is on
-
-$route['signup_submit'] = 'form/signup'; // If the user submits the signup form
-$route['login_submit'] = 'form/login'; // If the user submits the login form
-$route['profile_submit'] = 'form/update_account';
-// /HREF REDIRECTS
+// Redirects to get/update the data of the user
+$route['logout'] = 'general/logout'; // Logout of the account
+$route['delete-account'] = 'account_controller/delete_account'; // Delete the account
+$route['signup_submit'] = 'account_controller/signup'; // Signup
+$route['login_submit'] = 'account_controller/login'; // Login
+$route['profile_submit'] = 'account_controller/update_account'; // Updates the profile inside the settings
+// Redirects to get/update the data of the user
