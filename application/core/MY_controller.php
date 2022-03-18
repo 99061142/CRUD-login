@@ -14,15 +14,15 @@ class MY_controller extends CI_Controller{
         if(isset($_SESSION['logged_in'])){
             // If the email and password are stored in the session
             if(isset($_SESSION['email'], $_SESSION['password'])){
-                // Check if the account can be found
-                $this->load->model('login_model');
+                // Check if the account exists
+                $this->load->model('account_model');
 
                 $where = array(
                     'email' => $_SESSION['email'],
                     'password' => $_SESSION['password']
                 );
 
-                $acccount_found = $this->login_model->check_account($where);
+                $acccount_found = $this->account_model->exists_account($where);
             }
         }
 
