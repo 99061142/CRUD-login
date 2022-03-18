@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Login_model extends CI_Model{
-    // Check if an account was made with the specific data inside the array
-    public function check_account($where){
+class Account_model extends CI_Model{
+    // Check if an account exists
+    public function exists_account($where){
         $this->db->select('id');
         $this->db->from('accounts');
         $this->db->where($where);
@@ -13,7 +13,7 @@ class Login_model extends CI_Model{
     }
 
 
-    // Get the account data of the user to add in in the session
+    // Get specific data of the account to add in the session
     public function get_account_data($where){
         $this->db->select('email, password, username');
         $this->db->from('accounts');
@@ -30,14 +30,14 @@ class Login_model extends CI_Model{
     }
 
     
-    // Change the account data of the user
+    // Change the data of the account
     public function change_account_data($where, $change_data){
         $this->db->where($where);
         $this->db->update('accounts', $change_data);
     }
 
 
-    // Delete the account of the user
+    // Delete the account
     public function delete_account_data($where){
         $this->db->where($where);
         $this->db->delete('accounts');
