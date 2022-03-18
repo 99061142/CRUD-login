@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Page extends MY_controller{
+class Page_controller extends MY_controller{
 	// Singup form
 	public function signup_form(){
 		$this->load->helper('form');
