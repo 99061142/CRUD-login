@@ -70,5 +70,5 @@ $route['delete-account'] = 'form/delete_account'; // Delete the account the user
 
 $route['signup_submit'] = 'form/signup'; // If the user submits the signup form
 $route['login_submit'] = 'form/login'; // If the user submits the login form
-$route['profile_submit'] = 'form/profile';
+$route['profile_submit'] = 'form/update_account';
 // /HREF REDIRECTS
