@@ -9,16 +9,24 @@ class Page extends MY_controller{
 		$email = null;
 		$password = null;
 
-		// If the email and password are stored in the session
-		if(isset($_SESSION['email'], $_SESSION['password'])){
-			// Get the account data with the session data
-			$this->load->model('login_model');
-			$account_information = $this->login_model->account_information($_SESSION['email'], $_SESSION['password']);
-		
-			// If the account could be found
-			if(isset($account_information->email, $account_information->password)){
-				$email = $account_information->email;
-				$password = $account_information->password;
+		// If the session says the user logged in
+		if(isset($_SESSION['logged_in'])){
+			// If the email and password are stored in the session
+			if(isset($_SESSION['email'], $_SESSION['password'])){
+				// Get the account data with the session data
+				$where = array(
+					'email' => $_SESSION['email'],
+					'password' => $_SESSION['password']
+				);
+
+				$this->load->model('account_model');
+				$account_information = $this->account_model->get_account_data($where);
+			
+				// If the account could be found
+				if(isset($account_information->email, $account_information->password)){
+					$email = $account_information->email;
+					$password = $account_information->password;
+				}
 			}
 		}
 
@@ -43,16 +51,24 @@ class Page extends MY_controller{
 		$email = null;
 		$password = null;
 
-		// If the email and password are stored in the session
-		if(isset($_SESSION['email'], $_SESSION['password'])){
-			// Get the account data with the session data
-			$this->load->model('login_model');
-			$account_information = $this->login_model->account_information($_SESSION['email'], $_SESSION['password']);
-		
-			// If the account could be found
-			if(isset($account_information->email, $account_information->password)){
-				$email = $account_information->email;
-				$password = $account_information->password;
+		// If the session says the user logged in
+		if(isset($_SESSION['logged_in'])){
+			// If the email and password are stored in the session
+			if(isset($_SESSION['email'], $_SESSION['password'])){
+				// Get the account data with the session data
+				$where = array(
+					'email' => $_SESSION['email'],
+					'password' => $_SESSION['password']
+				);
+
+				$this->load->model('account_model');
+				$account_information = $this->account_model->get_account_data($where);
+			
+				// If the account could be found
+				if(isset($account_information->email, $account_information->password)){
+					$email = $account_information->email;
+					$password = $account_information->password;
+				}
 			}
 		}
 
