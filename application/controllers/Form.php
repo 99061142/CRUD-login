@@ -8,13 +8,28 @@ class Form extends MY_controller{
 	}
 
 
-	// When the user submits the singup form
+	// When the user submits the signup form
 	public function signup(){
 		// If the user answered all the questions
 		if($_POST['email'] && $_POST['password']){
-			// If the user used an email that was never used before
-			if(!$this->login_model->mail_aready_used($_POST['email'])){
-				$this->login_model->add_account($_POST['email'], $_POST['password']); // Create the account
+			// Data that is being checked if it's already used for an account
+			$where = array( 
+				'email' => $_POST['email']
+			);
+
+			// If the data is never used for an account
+			if(!$this->login_model->check_account($where)){
+				// Data for the new account
+				$new_account_data = array(
+					'salt' => ''
+				);
+
+				// Add the signup form data to the data that gets added to the new account
+				foreach($_POST as $key => $value){
+					$new_account_data[$key] = $value;
+				}
+
+				$this->login_model->add_account($new_account_data); // Create the account
 				redirect('login'); // Go to the login form
 			}
 		}
@@ -25,8 +40,14 @@ class Form extends MY_controller{
 
 	// When the user submits the login form
 	public function login(){
-		// If the user correctly logged in
-		if($this->login_model->account_information($_POST['email'], $_POST['password'])){
+		// Data that is being checked if it's already used for an account
+		$where = array( 
+			'email' => $_POST['email'],
+			'password' => $_POST['password']
+		);
+
+		// If the data is being used for an account
+		if($this->login_model->check_account($where)){
 			$this->get_session_data(); // Get the session data
 			redirect('homepage'); // Go to the homepage
 		}
@@ -35,6 +56,7 @@ class Form extends MY_controller{
 	}
 
 
+	// Add the data to the session, and let the user login
 	public function get_session_data(){
 		// If the user already logged in, but need to update the session data
 		if(isset($_SESSION['email'], $_SESSION['password'])){
@@ -48,23 +70,29 @@ class Form extends MY_controller{
 			$password = $_POST['password'];
 		}
 
-		$account_information = $this->login_model->account_information($email, $password); // Check if the account can be found
+		// Data that is being checked if it's already used for an account
+		$where = array(
+			'email' => $email,
+			'password' => $password
+		);
 
-		// If the account was found
-		if($account_information){
+		// If the data is being used for an account
+		if($this->login_model->check_account($where)){
+			$account_data = $this->login_model->get_account_data($where); // Get specific account data to add it into the session
+
 			// Add the account data into the session
 			$this->session->userdata = array(
-        		'email' => $account_information->email,
-    	    	'password' => $account_information->password,
-				'username' => $account_information->username,
+        		'email' => $account_data->email,
+    	    	'password' => $account_data->password,
+				'username' => $account_data->username,
     	    	'logged_in' => TRUE,
 			);	
 		}
 	}
 
 
-	// If the information of the profile gets changed by the user
-	public function profile(){
+	// If the acount data gets changed by the user
+	public function update_account(){
 		$change_data = []; // Array with the data that needs to be changed
 
 		// Add the values that needs to be changed to the array
@@ -75,18 +103,33 @@ class Form extends MY_controller{
 			}
 		}
 
-		$this->login_model->change_account_data($_SESSION['email'], $_SESSION['password'], $change_data); // Change the values that the user changed
-		
-		$this->get_session_data(); // Updates the session data
+		// Data that the account needs to update the account
+		$where = array(
+			'email' => $_SESSION['email'],
+			'password' => $_SESSION['password']
+		);
 
-		redirect('profile'); // Redirects the user back
+		// If there are values that needs to be changed
+		if($change_data){
+			$this->login_model->change_account_data($where, $change_data); // Change the values that the user changed
+			$this->get_session_data(); // Updates the session data
+		}
+
+		redirect('profile'); // Redirects the user to the profile page
 	}
 
 
+	// If the user deletes the account
 	public function delete_account(){
 		// If the user wants to delete the account
 		if(isset($_POST['yes'])){
-        	$this->login_model->delete_account_data($_SESSION['email'], $_SESSION['password']); // Delete the account of the user
+			// Delete the account with the specific information inside this array
+			$where = array(
+				'email' => $_POST['email'],
+				'password' => $_POST['password']
+			);
+
+        	$this->login_model->delete_account_data($where); // Delete the account of the user
 
 			session_destroy(); // Delete the session data
 			redirect('signup'); // Redirects the user to the singup page
