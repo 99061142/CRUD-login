@@ -53,21 +53,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'page/homepage'; // Landings page
 
 // Pages
-$route['signup'] = 'page/signup_form'; // Signup form
-$route['login'] = 'page/login_form'; // Login form
-$route['homepage'] = 'page/homepage'; // Homepage
+$route['signup'] = 'page_controller/signup_form'; // Signup form
+$route['login'] = 'page_controller/login_form'; // Login form
+$route['homepage'] = 'page_controller/homepage'; // Homepage
 // /Pages
 
 
 // Confirmation pages
-$route['account-deletion'] = 'page/ask_account_deletion'; // Deletion of the account
+$route['account-deletion'] = 'page_controller/ask_account_deletion'; // Deletion of the account
 // /Confirmation pages
 
 
 
 // Account settings
-$route['profile'] = 'page/account_settings/profile';
-$route['settings'] = 'page/account_settings/settings';
+$route['profile'] = 'page_controller/account_settings/profile';
+$route['settings'] = 'page_controller/account_settings/settings';
 // /Account settings
 
 
