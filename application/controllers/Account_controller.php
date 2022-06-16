@@ -7,6 +7,17 @@ class Account_controller extends MY_controller {
 		$this->load->model('account_model');
 	}
 
+	public function set_session($form_data){
+		$account_data = $this->account_model->account_data($form_data);
+
+		$this->session->userdata = array(
+			'email' => $account_data->email,
+			'username' => $account_data->username,
+			'password' => $account_data->password,
+		   	'logged_in' => TRUE
+		);
+	}
+
 	// If the acount data gets changed by the user
 	public function update_account(){
 		$change_data = []; // Array with the data that needs to be changed
@@ -32,18 +43,6 @@ class Account_controller extends MY_controller {
 		}
 
 		redirect('profile'); // Redirects the user to the profile page
-	}
-
-
-	// If the user deletes the account
-	public function delete_account_data(){
-		$where = array(
-			'email' => $_SESSION['email'],
-			'password' => $_SESSION['password']
-		);
-		$this->account_model->delete_account_data($where);
-		session_destroy();
-		redirect('signup');
 	}
 
 	// Get the data of the user, and add it into the session
@@ -73,19 +72,10 @@ class Account_controller extends MY_controller {
 			// Add the account data into the session
 			$this->session->userdata = array(
         		'email' => $account_data->email,
-    	    	'password' => $account_data->password,
-				'username' => $account_data->username,
-    	    	'logged_in' => TRUE,
+    	    	'username' => $account_data->username,
+				'password' => $account_data->password,
+    	    	'logged_in' => TRUE
 			);	
 		}
-	}
-
-
-	public function set_session($data){
-		$this->session->userdata = array(
-			'email' => $data['email'],
-		   	'password' => $data['password'],
-		   	'logged_in' => TRUE,
-		);
 	}
 }
