@@ -57,8 +57,8 @@ $route['signup'] = 'page_controller/signup';
 $route['login'] = 'page_controller/login';
 $route['homepage'] = 'page_controller/homepage';
 $route['delete_account'] = 'page_controller/delete_account';
-$route['profile'] = 'page_controller/account_settings/profile';
-$route['settings'] = 'page_controller/account_settings/settings';
+$route['profile'] = 'page_controller/profile';
+$route['settings'] = 'page_controller/settings';
 
 
 // --------------------------------------------------------------------
