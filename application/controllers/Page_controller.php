@@ -7,23 +7,22 @@ class Page_controller extends Account_controller{
     public function __construct() {
         parent::__construct();
 		$this->load->helper('form');
-		$this->load->model('account_model');
     }
 
-	public function signup(){
+	public function signup() {
 		$form_inputs = ['email', 'username', 'password']; // The inputs that are needed to sign up
 
-		// Set the standard value of the input to the session, else to the given value
+		// Set the input / errors values 
 		foreach($form_inputs as $input){
-			if(isset($_POST[$input])){
+			if(isset($_POST[$input])) {
 				$data[$input] = $_POST[$input]; // Input value
-			}elseif(isset($_SESSION[$input])){
+			}elseif(isset($_SESSION[$input])) {
 				$data[$input] = $_SESSION[$input]; // Session value
 			}
 
-			if($_POST){
+			if($_POST) {
 				$data["{$input}_error"] = empty($data[$input]) ? "{$input} is required" : "";
-			}else{
+			}else {
 				// First time page loaded
 				$data["{$input}_error"] = "";
 				$data[$input] = "";
@@ -38,14 +37,14 @@ class Page_controller extends Account_controller{
 		// Check if there are no errors
 		$errors = false;
 		foreach ($data as $key => $value) {
-			if(!in_array($key, $form_inputs) && !empty($value)){
+			if(!in_array($key, $form_inputs) && !empty($value)) {
 				$errors = true;
 				break;
 			}
 		}
 
 		// If the user signed up and there are no errors
-		if($_POST && !$errors){
+		if($_POST && !$errors) {
 			$form_data = array(
 				'email' => $data['email'],
 				'username' => $data['username'],
@@ -63,17 +62,17 @@ class Page_controller extends Account_controller{
 	public function login(){
 		$form_inputs = ['email', 'password']; // The inputs that are needed to login
 
-		// Set the standard value of the input to the session, else to the given value
-		foreach($form_inputs as $input){
-			if(isset($_POST[$input])){
+		// Set the input / errors values 
+		foreach($form_inputs as $input) {
+			if(isset($_POST[$input])) {
 				$data[$input] = $_POST[$input]; // Input value
-			}elseif(isset($_SESSION[$input])){
+			}elseif(isset($_SESSION[$input])) {
 				$data[$input] = $_SESSION[$input]; // Session value
 			}
 
-			if($_POST){
+			if($_POST) {
 				$data["{$input}_error"] = empty($data[$input]) ? "{$input} is required" : "";
-			}else{
+			}else {
 				// First time page loaded
 				$data["{$input}_error"] = "";
 				$data[$input] = "";
@@ -86,10 +85,10 @@ class Page_controller extends Account_controller{
 		);
 
 		// If the user logged in and the account doesn't exist
-		if($_POST && !$this->account_model->account_exists($form_data)){
+		if($_POST && !$this->account_model->account_exists($form_data)) {
 			if($this->account_model->email_exists($data['email'])){
 				$data['password_error'] = "The password is incorrect";
-			}else{
+			}else {
 				$data['email_error'] = "The email is not registered";
 				$data['password_error'] = "Check if the email or password is correct";
 			}
@@ -98,14 +97,14 @@ class Page_controller extends Account_controller{
 		// Check if there are no errors
 		$errors = false;
 		foreach ($data as $key => $value) {
-			if(!in_array($key, $form_inputs) && !empty($value)){
+			if(!in_array($key, $form_inputs) && !empty($value)) {
 				$errors = true;
 				break;
 			}
 		}
 
 		// If the user logged in and there are no errors
-		if($_POST && !$errors){
+		if($_POST && !$errors) {
 			$this->set_session($form_data);
 			redirect('homepage');
 		}
@@ -115,57 +114,58 @@ class Page_controller extends Account_controller{
 		$this->load->view('template/footer');
 	}
 
-	public function delete_account(){
-		if(isset($_POST['yes'])) {
-    		$this->delete_account_data();
-		}elseif(isset($_POST['no'])) {
-			$this->account_settings("settings");
-		}else {
-			# Ask if the user wants to delete the account
-			$this->load->view('template/header');
-			$this->load->view('template/navigation');
-			$this->load->view('pages/settings/delete_account');
-			$this->load->view('template/footer');
-		}
-	}
-
-
-
-
-
-
-
-
-
-	// Homepage
 	public function homepage(){
-		// Homepage
 		$this->load->view('template/header');
 		$this->load->view('template/navigation');
 		$this->load->view('pages/homepage');
 		$this->load->view('template/footer');
 	}
 
-
-	public function account_settings($account_info){
+	public function settings(){
 		$where = array(
 			'email' => $_SESSION['email'],
 			'password' => $_SESSION['password']
 		);
-
-		$this->load->model('account_model');
-		$data['bio'] = $this->account_model->account_data($where)->bio;
-		$data['username'] = $_SESSION['username'];
-		$data['email'] = $_SESSION['email'];
-
-		if($account_info == "profile"){
-			$this->load->helper('form');
-		}
+		$data = $this->account_model->account_data($where);
 
 		$this->load->view('template/header');
 		$this->load->view('template/navigation');
-		$this->load->view('template/account-navigation', $data);
-		$this->load->view("pages/settings/{$account_info}");
-		$this->load->view('template/footer');	
+		$this->load->view('template/setting_navigation', $data);
+		$this->load->view('pages/settings/settings');
+		$this->load->view('template/footer');
+	}
+
+	public function profile(){
+		$where = array(
+			'email' => $_SESSION['email'],
+			'password' => $_SESSION['password']
+		);
+		$data = $this->account_model->account_data($where);
+
+		$this->load->view('template/header');
+		$this->load->view('template/navigation');
+		$this->load->view('template/setting_navigation', $data);
+		$this->load->view('pages/settings/profile');
+		$this->load->view('template/footer');
+	}
+
+	public function delete_account(){
+		if(isset($_POST['yes'])) {
+			$where = array(
+				'email' => $_SESSION['email'],
+				'password' => $_SESSION['password']
+			);
+
+    		$this->account_model->delete_account_data($where);
+			redirect('login');
+		}elseif(isset($_POST['no'])) {
+			redirect('settings');
+		}
+
+		# Ask if the user wants to delete the account
+		$this->load->view('template/header');
+		$this->load->view('template/navigation');
+		$this->load->view('pages/settings/delete_account');
+		$this->load->view('template/footer');
 	}
 }
