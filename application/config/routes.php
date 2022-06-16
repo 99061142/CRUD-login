@@ -50,29 +50,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
-$route['default_controller'] = 'page_controller/homepage'; // Landings page
+$route['default_controller'] = 'page_controller/homepage'; 
 
 // Pages
 $route['signup'] = 'page_controller/signup';
 $route['login'] = 'page_controller/login';
 $route['homepage'] = 'page_controller/homepage';
-// /Pages
-
-
-// Confirmation pages
-$route['account-deletion'] = 'page_controller/delete_account'; // Deletion of the account
-// /Confirmation pages
-
-
-
-// Account settings
+$route['delete_account'] = 'page_controller/delete_account';
 $route['profile'] = 'page_controller/account_settings/profile';
 $route['settings'] = 'page_controller/account_settings/settings';
-// /Account settings
 
 
-// Redirects to get/update the data of the user
-$route['logout'] = 'general/logout'; // Logout of the account
-$route['login_submit'] = 'account_controller/login'; // Login
+// --------------------------------------------------------------------
+$route['logout'] = 'general/logout';
+
+
+
+
 $route['profile_submit'] = 'account_controller/update_account'; // Updates the profile inside the settings
-// Redirects to get/update the data of the user
