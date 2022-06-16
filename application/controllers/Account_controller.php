@@ -7,51 +7,6 @@ class Account_controller extends MY_controller {
 		$this->load->model('account_model');
 	}
 
-
-	// When the user submits the signup form
-	public function signup(){
-		// If the user answered all the questions
-		if($_POST['email'] && $_POST['password'] && $_POST['username']){
-			// If the data is never used before
-			$where = array( 
-				'email' => $_POST['email'],
-				'username' => $_POST['username']
-			);
-
-			if(!$this->account_model->account_exists($where)){
-				foreach($_POST as $key => $value){
-					$new_account_data[$key] = $value;
-				}
-
-				$this->account_model->add_account($new_account_data); // Create the account
-				redirect('login'); // Go to the login form
-			}
-		}
-
-		redirect('signup'); // Go to the signup form
-	}
-
-
-	// When the user submits the login form
-	public function login(){
-		// check if the data is alreay in use for an account
-		$where = array(
-			'email' => $_POST['email'],
-			'password' => $_POST['password']
-		);
-
-		
-
-		// If the data is used for an account
-		if($this->account_model->account_exists($where)){
-			$this->get_session_data(); // Get the session data
-			redirect('homepage'); // Go to the homepage
-		}
-
-		redirect("login"); // Go to the login form
-	}
-
-
 	// If the acount data gets changed by the user
 	public function update_account(){
 		$change_data = []; // Array with the data that needs to be changed
