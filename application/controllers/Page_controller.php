@@ -16,21 +16,22 @@ class Page_controller extends Account_controller{
 		// Set the standard value of the input to the session, else to the given value
 		foreach($form_inputs as $input){
 			if(isset($_POST[$input])){
-				$data[$input] = $_POST[$input];
+				$data[$input] = $_POST[$input]; // Input value
 			}elseif(isset($_SESSION[$input])){
-				$data[$input] = $_SESSION[$input];
+				$data[$input] = $_SESSION[$input]; // Session value
+			}
+
+			if($_POST){
+				$data["{$input}_error"] = empty($data[$input]) ? "{$input} is required" : "";
 			}else{
+				// First time page loaded
+				$data["{$input}_error"] = "";
 				$data[$input] = "";
 			}
 		}
 
-		// Set the error messages
-		$data['email_error'] = empty($data['email']) ? "The email is required" : "";
-		$data['username_error'] = empty($data['username']) ? "The username is required" : "";
-		$data['password_error'] = empty($data['password']) ? "The password is required" : "";
-
 		// If the user signed up and used an email that was already used
-		if($_POST && !empty($data['email']) && $this->account_model->email_exists($data['email'])){
+		if(!empty($data['email']) && $_POST && $this->account_model->email_exists($data['email'])){
 			$data['email_error'] = "The email is already in use";
 		}
 
@@ -65,27 +66,28 @@ class Page_controller extends Account_controller{
 		// Set the standard value of the input to the session, else to the given value
 		foreach($form_inputs as $input){
 			if(isset($_POST[$input])){
-				$data[$input] = $_POST[$input];
+				$data[$input] = $_POST[$input]; // Input value
 			}elseif(isset($_SESSION[$input])){
-				$data[$input] = $_SESSION[$input];
+				$data[$input] = $_SESSION[$input]; // Session value
+			}
+
+			if($_POST){
+				$data["{$input}_error"] = empty($data[$input]) ? "{$input} is required" : "";
 			}else{
+				// First time page loaded
+				$data["{$input}_error"] = "";
 				$data[$input] = "";
 			}
 		}
-
-		// Set the error messages
-		$data['email_error'] = empty($data['email']) ? "The email is required" : "";
-		$data['password_error'] = empty($data['password']) ? "The password is required" : "";
 
 		$form_data = array( 
 			'email' => $data['email'],
 			'password' => $data['password']
 		);
 
-		// If the user logged in and the account don't exists
+		// If the user logged in and the account doesn't exist
 		if($_POST && !$this->account_model->account_exists($form_data)){
 			if($this->account_model->email_exists($data['email'])){
-				$data['email_error'] = "";
 				$data['password_error'] = "The password is incorrect";
 			}else{
 				$data['email_error'] = "The email is not registered";
@@ -112,6 +114,28 @@ class Page_controller extends Account_controller{
 		$this->load->view('pages/login', $data);
 		$this->load->view('template/footer');
 	}
+
+	public function delete_account(){
+		if(isset($_POST['yes'])) {
+    		$this->delete_account_data();
+		}elseif(isset($_POST['no'])) {
+			$this->account_settings("settings");
+		}else {
+			# Ask if the user wants to delete the account
+			$this->load->view('template/header');
+			$this->load->view('template/navigation');
+			$this->load->view('pages/settings/delete_account');
+			$this->load->view('template/footer');
+		}
+	}
+
+
+
+
+
+
+
+
 
 	// Homepage
 	public function homepage(){
@@ -143,21 +167,5 @@ class Page_controller extends Account_controller{
 		$this->load->view('template/account-navigation', $data);
 		$this->load->view("pages/settings/{$account_info}");
 		$this->load->view('template/footer');	
-	}
-
-
-	// Ask if the user wants to delete the account
-	public function delete_account(){
-		if(isset($_POST['yes'])) {
-    		$this->delete_account_data();
-		}elseif(isset($_POST['no'])) {
-			$this->account_settings("settings");
-		}else {
-			# Ask if the user wants to delete the account
-			$this->load->view('template/header');
-			$this->load->view('template/navigation');
-			$this->load->view('pages/settings/ask_account_deletion');
-			$this->load->view('template/footer');
-		}
 	}
 }
