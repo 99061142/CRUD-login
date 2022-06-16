@@ -156,7 +156,7 @@ class Page_controller extends Account_controller{
 				'password' => $_SESSION['password']
 			);
 
-    		$this->account_model->delete_account_data($where);
+    		$this->account_model->delete_account($where);
 			redirect('login');
 		}elseif(isset($_POST['no'])) {
 			redirect('settings');
