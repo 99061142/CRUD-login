@@ -2,17 +2,23 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Account_model extends CI_Model{
-    // Check if an account exists
-    public function exists_account($where){
-        $this->db->select('id');
-        $this->db->from('accounts');
+    public function account_exists($where){
+        // check if an account could be found
         $this->db->where($where);
-        $data = $this->db->get();
-
-        return $data->row() == true;
+        $query = $this->db->get('accounts');
+        return $query->num_rows() > 0;
     }
 
+    public function account_data($where){
+        $this->db->where($where);
+        # get account with specific information (email, password, username)
+        $this->db->select('email, password, username, bio');
+        $this->db->from('accounts');
+        $this->db->where($where);
+        return $this->db->get()->row();
+    }
 
+    /*
     // Get specific data of the account to add in the session
     public function get_account_data($where){
         $this->db->select('email, password, username');
@@ -22,11 +28,12 @@ class Account_model extends CI_Model{
 
         return $data->row();
     }
+    */
 
 
     // Add a new account
-    public function add_account($new_account_data){
-        $this->db->insert('accounts', $new_account_data);
+    public function create_account($data){
+        $this->db->insert('accounts', $data);
     }
 
     

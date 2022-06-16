@@ -16,17 +16,11 @@
             <?= $_SESSION['email'][0]; ?>
         </button>
         <div class="dropdown-menu dropdown-menu-right mt-2" aria-labelledby="accounts-info">
-            <ul class="p-0 pl-2">
-                <p>Account</p>
-                <div class="dropdown-divider"></div>
-                <li class="dropdown-item p-0">
-                    <a class="text-dark text-decoration-none" href="settings">Settings</a>
-                </li>
-                <div class="dropdown-divider"></div>
-                <li class="dropdown-item p-0">
-                    <a class="text-dark text-decoration-none" href="logout">Log out</a>
-                </li>
-            </ul>
+            <a class="text-dark text-decoration-none" href="settings">Settings</a>
+        
+            <div class="dropdown-divider"></div>
+            
+            <a class="text-dark text-decoration-none" href="logout">Log out</a>
         </div>
     </div>
 </nav>

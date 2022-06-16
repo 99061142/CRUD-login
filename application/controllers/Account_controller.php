@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Account_controller extends MY_controller{
+class Account_controller extends MY_controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->model('account_model');
@@ -11,20 +11,14 @@ class Account_controller extends MY_controller{
 	// When the user submits the signup form
 	public function signup(){
 		// If the user answered all the questions
-		if($_POST['email'] && $_POST['password']){
-			// Data that is being checked if it's already used for an account
+		if($_POST['email'] && $_POST['password'] && $_POST['username']){
+			// If the data is never used before
 			$where = array( 
-				'email' => $_POST['email']
+				'email' => $_POST['email'],
+				'username' => $_POST['username']
 			);
 
-			// If the data is never used for an account
-			if(!$this->account_model->exists_account($where)){
-				// Data for the new account
-				$new_account_data = array(
-					'salt' => ''
-				);
-
-				// Add the signup form data to the data that gets added to the new account
+			if(!$this->account_model->account_exists($where)){
 				foreach($_POST as $key => $value){
 					$new_account_data[$key] = $value;
 				}
@@ -40,14 +34,16 @@ class Account_controller extends MY_controller{
 
 	// When the user submits the login form
 	public function login(){
-		// Data that is being checked if it's already used for an account
-		$where = array( 
+		// check if the data is alreay in use for an account
+		$where = array(
 			'email' => $_POST['email'],
 			'password' => $_POST['password']
 		);
 
-		// If the data is being used for an account
-		if($this->account_model->exists_account($where)){
+		
+
+		// If the data is used for an account
+		if($this->account_model->account_exists($where)){
 			$this->get_session_data(); // Get the session data
 			redirect('homepage'); // Go to the homepage
 		}
@@ -85,24 +81,15 @@ class Account_controller extends MY_controller{
 
 
 	// If the user deletes the account
-	public function delete_account(){
-		// If the user wants to delete the account
-		if(isset($_POST['yes'])){
-			// Delete the account with the specific information inside this array
-			$where = array(
-				'email' => $_POST['email'],
-				'password' => $_POST['password']
-			);
-
-        	$this->account_model->delete_account_data($where); // Delete the account of the user
-
-			session_destroy(); // Delete the session data
-			redirect('signup'); // Redirects the user to the singup page
-		}
-		
-		redirect('settings'); // Redirects the user to the settings page
+	public function delete_account_data(){
+		$where = array(
+			'email' => $_SESSION['email'],
+			'password' => $_SESSION['password']
+		);
+		$this->account_model->delete_account_data($where);
+		session_destroy();
+		redirect('signup');
 	}
-
 
 	// Get the data of the user, and add it into the session
 	public function get_session_data(){
@@ -125,8 +112,8 @@ class Account_controller extends MY_controller{
 		);
 
 		// Check if an account exists with the data inside the array
-		if($this->account_model->exists_account($where)){
-			$account_data = $this->account_model->get_account_data($where); // Get the data that the model returns
+		if($this->account_model->account_exists($where)){
+			$account_data = $this->account_model->account_data($where);
 
 			// Add the account data into the session
 			$this->session->userdata = array(
