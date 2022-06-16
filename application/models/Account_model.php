@@ -17,40 +17,22 @@ class Account_model extends CI_Model{
 
     public function account_data($where){
         $this->db->where($where);
-        $this->db->select('email, password, username, bio');
+        $this->db->select('*');
         $this->db->from('accounts');
         $this->db->where($where);
         return $this->db->get()->row();
     }
 
-    /*
-    // Get specific data of the account to add in the session
-    public function get_account_data($where){
-        $this->db->select('email, password, username');
-        $this->db->from('accounts');
-        $this->db->where($where);
-        $data = $this->db->get();
-
-        return $data->row();
-    }
-    */
-
-
-    // Add a new account
     public function create_account($data){
         $this->db->insert('accounts', $data);
     }
 
-    
-    // Change the data of the account
-    public function change_account_data($where, $change_data){
-        $this->db->where($where);
-        $this->db->update('accounts', $change_data);
+    public function update_account($previous_data, $new_data){
+        $this->db->where($previous_data);
+        $this->db->update('accounts', $new_data);
     }
 
-
-    // Delete the account
-    public function delete_account_data($where){
+    public function delete_account($where){
         $this->db->where($where);
         $this->db->delete('accounts');
     }
