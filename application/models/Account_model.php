@@ -3,15 +3,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Account_model extends CI_Model{
     public function account_exists($where){
-        // check if an account could be found
         $this->db->where($where);
         $query = $this->db->get('accounts');
         return $query->num_rows() > 0;
     }
 
+    public function email_exists($email){
+        $this->db->where('email', $email);
+        $query = $this->db->get('accounts');
+        return $query->num_rows() > 0;
+    }
+
+
     public function account_data($where){
         $this->db->where($where);
-        # get account with specific information (email, password, username)
         $this->db->select('email, password, username, bio');
         $this->db->from('accounts');
         $this->db->where($where);

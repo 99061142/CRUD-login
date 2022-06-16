@@ -124,4 +124,13 @@ class Account_controller extends MY_controller {
 			);	
 		}
 	}
+
+
+	public function set_session($data){
+		$this->session->userdata = array(
+			'email' => $data['email'],
+		   	'password' => $data['password'],
+		   	'logged_in' => TRUE,
+		);
+	}
 }

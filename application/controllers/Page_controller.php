@@ -11,43 +11,46 @@ class Page_controller extends Account_controller{
     }
 
 	public function signup(){
-		$form_inputs = ['email', 'username', 'password'];
+		$form_inputs = ['email', 'username', 'password']; // The inputs that are needed to sign up
 
+		// Set the standard value of the input to the session, else to the given value
 		foreach($form_inputs as $input){
-			if(isset($_SESSION[$input])){
+			if(isset($_POST[$input])){
+				$data[$input] = $_POST[$input];
+			}elseif(isset($_SESSION[$input])){
 				$data[$input] = $_SESSION[$input];
 			}else{
-				$data[$input] = (isset($_POST[$input])) ? $_POST[$input] : "";
+				$data[$input] = "";
 			}
 		}
 
-		$where = ['email' => $data['email']];
-		if($this->account_model->account_exists($where)){
-			$data['email_error'] = "Email is already in use";
-			$data['email'] = "";
-		}else{
-			$data['email_error'] = (empty($data['email'])) ? "Email is required" : "";
+		// Set the error messages
+		$data['email_error'] = empty($data['email']) ? "The email is required" : "";
+		$data['username_error'] = empty($data['username']) ? "The username is required" : "";
+		$data['password_error'] = empty($data['password']) ? "The password is required" : "";
+
+		// If the user signed up and used an email that was already used
+		if($_POST && !empty($data['email']) && $this->account_model->email_exists($data['email'])){
+			$data['email_error'] = "The email is already in use";
 		}
 
-		$data['username_error'] = (empty($data['username'])) ? "* username is required" : "";
-		$data['password_error'] = (empty($data['password'])) ? "* password is required" : "";
-
-
+		// Check if there are no errors
 		$errors = false;
 		foreach ($data as $key => $value) {
-			if(!empty($value) && !in_array($key, $form_inputs)){
+			if(!in_array($key, $form_inputs) && !empty($value)){
 				$errors = true;
 				break;
 			}
 		}
 
-		if(!$errors){
-			$data = array(
+		// If the user signed up and there are no errors
+		if($_POST && !$errors){
+			$form_data = array(
 				'email' => $data['email'],
 				'username' => $data['username'],
 				'password' => $data['password']				
 			);
-			$this->account_model->create_account($data);
+			$this->account_model->create_account($form_data);
 			redirect('login');
 		}
 
@@ -56,47 +59,59 @@ class Page_controller extends Account_controller{
 		$this->load->view('template/footer');
 	}
 
-	// Login form
-	public function login_form(){
-		$this->load->helper('form');
+	public function login(){
+		$form_inputs = ['email', 'password']; // The inputs that are needed to login
 
-		$email = null;
-		$password = null;
-
-		// If the session says the user logged in
-		if(isset($_SESSION['logged_in'])){
-			// If the email and password are stored in the session
-			if(isset($_SESSION['email'], $_SESSION['password'])){
-				// Get the account data with the session data
-				$where = array(
-					'email' => $_SESSION['email'],
-					'password' => $_SESSION['password']
-				);
-
-				$this->load->model('account_model');
-				$account_information = $this->account_model->get_account_data($where);
-			
-				// If the account could be found
-				if(isset($account_information->email, $account_information->password)){
-					$email = $account_information->email;
-					$password = $account_information->password;
-				}
+		// Set the standard value of the input to the session, else to the given value
+		foreach($form_inputs as $input){
+			if(isset($_POST[$input])){
+				$data[$input] = $_POST[$input];
+			}elseif(isset($_SESSION[$input])){
+				$data[$input] = $_SESSION[$input];
+			}else{
+				$data[$input] = "";
 			}
 		}
 
-		// Login data
-		$data['title'] = 'Login'; // Title above the form
-		$data['href_route'] = 'signup'; // Route to the signup form
-		$data['href_text'] = 'Sign up for an account'; // Text for the route to the signup form
-		$data['email'] = $email; // Email that was stored inside the session
-		$data['password'] = $password; // Password that was stored inside the session
+		// Set the error messages
+		$data['email_error'] = empty($data['email']) ? "The email is required" : "";
+		$data['password_error'] = empty($data['password']) ? "The password is required" : "";
 
-		// Login form
+		$form_data = array( 
+			'email' => $data['email'],
+			'password' => $data['password']
+		);
+
+		// If the user logged in and the account don't exists
+		if($_POST && !$this->account_model->account_exists($form_data)){
+			if($this->account_model->email_exists($data['email'])){
+				$data['email_error'] = "";
+				$data['password_error'] = "The password is incorrect";
+			}else{
+				$data['email_error'] = "The email is not registered";
+				$data['password_error'] = "Check if the email or password is correct";
+			}
+		}
+
+		// Check if there are no errors
+		$errors = false;
+		foreach ($data as $key => $value) {
+			if(!in_array($key, $form_inputs) && !empty($value)){
+				$errors = true;
+				break;
+			}
+		}
+
+		// If the user logged in and there are no errors
+		if($_POST && !$errors){
+			$this->set_session($form_data);
+			redirect('homepage');
+		}
+
 		$this->load->view('template/header');
 		$this->load->view('pages/login', $data);
-		$this->load->view('template/footer'); 
+		$this->load->view('template/footer');
 	}
-
 
 	// Homepage
 	public function homepage(){
@@ -145,6 +160,4 @@ class Page_controller extends Account_controller{
 			$this->load->view('template/footer');
 		}
 	}
-
-
 }
