@@ -16,8 +16,7 @@ class Account_model extends CI_Model{
 
 
     public function account_data($where){
-        $this->db->where($where);
-        $this->db->select('*');
+        $this->db->select('email, password, username, bio');
         $this->db->from('accounts');
         $this->db->where($where);
         return $this->db->get()->row();
