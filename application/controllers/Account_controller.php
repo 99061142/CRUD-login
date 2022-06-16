@@ -18,31 +18,13 @@ class Account_controller extends MY_controller {
 		);
 	}
 
-	// If the acount data gets changed by the user
 	public function update_account(){
-		$change_data = []; // Array with the data that needs to be changed
-
-		// Add the values that needs to be changed to the array
-		foreach($_POST as $key => $value){
-			// If the user changed the value
-			if($value){
-				$change_data[$key] = $value;
-			}
-		}
-
-		// Data that the account needs to update the account
 		$where = array(
 			'email' => $_SESSION['email'],
 			'password' => $_SESSION['password']
 		);
-
-		// If there are values that needs to be changed
-		if($change_data){
-			$this->account_model->change_account_data($where, $change_data); // Change the values that the user changed
-			$this->get_session_data(); // Updates the session data
-		}
-
-		redirect('profile'); // Redirects the user to the profile page
+		$this->account_model->update_account($where, $_POST);
+		redirect('profile');
 	}
 
 	// Get the data of the user, and add it into the session
