@@ -1,6 +1,10 @@
-# Assignment
+# Project
 
-Make a todo website with an login form, and show the todo lists to the account the user has made.
+Todo clone
+
+## Current state of the project
+
+Create an account, login/logout, change the status of the account and delete the account.
 
 
 ## NOTE
