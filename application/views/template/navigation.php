@@ -1,13 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
     <a class="navbar-brand text-white" href="homepage">Todo</a>
 
-    <ul class="navbar-nav mr-auto">    
-        <li class="nav-item">
-            <a class="nav-link text-white">Make board</a>
-        </li>
-    </ul>
-
-    <form>
+    <form class="ml-auto">
         <input class="form-control" type="search" placeholder="Search" />
     </form>
 
